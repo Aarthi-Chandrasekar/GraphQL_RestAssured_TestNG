@@ -1,0 +1,128 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.employee.api.test</groupId>
+  <artifactId>GraphQl-Automation</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>GraphQL-Employee-CURD-Automation</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <envBaseUrl>http://localhost:8081/graphql</envBaseUrl> <!--If envBaseUrl not specified will use this Url-->
+    <selenium.java.version>3.10.0</selenium.java.version>
+    <testng.version>7.0.0</testng.version>
+    <rest.assured>4.0.0</rest.assured>
+    <json.version>20190722</json.version>
+    <xml.path.version>4.0.0</xml.path.version>
+    <log4j.version>1.2.17</log4j.version>
+    <jaxb.osgi.version>2.3.2</jaxb.osgi.version>
+    <extentreports.version>2.40.2</extentreports.version>
+    <aspectj.version>1.9.4</aspectj.version>
+    <allure.testng.version>2.13.0</allure.testng.version>
+    <allure.rest.assured.version>2.13.0</allure.rest.assured.version>
+    <maven.surefire.plugin.version>2.20</maven.surefire.plugin.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-java</artifactId>
+      <version>${selenium.java.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>${testng.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <version>${rest.assured}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>${json.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>xml-path</artifactId>
+      <version>${xml.path.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-testng</artifactId>
+      <version>${allure.testng.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-rest-assured</artifactId>
+      <version>${allure.rest.assured.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjweaver</artifactId>
+      <version>${aspectj.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${maven.surefire.plugin.version}</version>
+          <configuration>
+            <argLine>
+              -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+            </argLine>
+            <properties>
+              <property>
+                <name>listener</name>
+                <value>io.qameta.allure.testng.AllureTestNg</value>
+              </property>
+            </properties>
+            <suiteXmlFiles>
+              <suiteXmlFile>testng.xml</suiteXmlFile>
+            </suiteXmlFiles>
+            <systemPropertyVariables>
+            <!--Used for BaseURL F.E. RestConfig.setBaseURI(System.getProperty("project.baseUrl"))-->
+              <project.baseUrl>${envBaseUrl}</project.baseUrl>
+              <allure.issues.tracker.pattern>https://chordx.atlassian.net/browse/{}</allure.issues.tracker.pattern>
+              <allure.link.tms.pattern>https://chordx.atlassian.net/browse/{}</allure.link.tms.pattern>
+          </systemPropertyVariables>
+            <systemProperties>
+              <property>
+                <name>allure.results.directory</name>
+                <value>${project.basedir}/allure-results</value>
+              </property>
+            </systemProperties>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+            <source>8</source>
+            <target>8</target>
+          </configuration>
+        </plugin>
+      </plugins>
+  </build>
+
+</project>
